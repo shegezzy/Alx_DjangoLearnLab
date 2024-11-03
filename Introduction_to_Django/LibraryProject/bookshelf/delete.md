@@ -2,7 +2,7 @@
 
 Command:
 ```python
-retrieved_book.delete()
+book.delete()
 Book.objects.all()
 #Expected Output:
 #<QuerySet []>
