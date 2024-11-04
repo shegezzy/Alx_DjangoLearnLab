@@ -8,7 +8,3 @@ class Book(models.Model):
     def __str__(self):
       return self.title
 # Create your models here.
-
-# Create a Book instance
-book = Book(title="1984", author="George Orwell", publication_year=1949)
-book.save()
