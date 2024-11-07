@@ -8,15 +8,15 @@ django.setup()
 from relationship_app.models import Author, Book, Library, Librarian
 
 # list books by author:
-def get_books_by_author(author):
+def get_books_by_author(author_name):
     try:
-        author = Author.objects.get(author=author)
-        books = author.books.all()
-        print(f'Books by {author}:')
+        author = Author.objects.get(name=author_name)
+        books = author.objects.filter(author=author)
+        print(f'Books by {author_name}:')
         for book in books:
             print(f'- {book.title}')
     except Author.DoesNotExist:
-        print(f'Author {author} does not exist.')
+        print(f'Author {author_name} does not exist.')
 
 # List of all the books:
 def get_books_in_library(library_name):
