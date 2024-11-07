@@ -32,7 +32,7 @@ def get_books_in_library(library_name):
 # Retrieve operation:
 def get_librarian_for_library(library_name):
     try:
-        library = Library.objects.get(name=library_name)
+        library = Library.objects.get(library=library_name)
         librarian = library.librarian
         print(f'Librarian for {library_name}: {librarian.name}')
     except Library.DoesNotExist:
