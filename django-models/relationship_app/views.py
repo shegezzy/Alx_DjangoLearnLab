@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.detail import DetailView
-from .models import Book
-from .forms import BookForm
-from .models import Library, UserProfile
+from relationship_app.models import Book
+from relationship_app.forms import BookForm
+from relationship_app.models import Library, UserProfile
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -57,7 +57,7 @@ def register(request):
             return redirect('home')  # Redirect to a success page (home or dashboard)
     else:
         form = UserCreationForm()
-    return render(request, 'register.html', {'form': form})
+    return render(request, 'relationship_app/register.html', {'form': form})
 
 def list_books(request):
     books = Book.objects.all()  # Fetch all books from the database
