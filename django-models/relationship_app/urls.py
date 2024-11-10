@@ -3,8 +3,12 @@
 from django.urls import path
 from .views import list_books, LibraryDetailView, LogoutView, LoginView
 from .views import register
+from .import views
 
 urlpatterns = [
+    path('admin/', views.admin_view, name='admin_view'),
+    path('librarian/', views.librarian_view, name='librarian_view'),
+    path('member/', views.member_view, name='member_view'),
     path('login/<int:pk>/', LoginView.as_view(template_name='login'), name='login'),
     path('logout/<int:pk>/', LogoutView.as_view(template_name='logout'), name='logout'),
     path('register/', register, name='views.register'),
