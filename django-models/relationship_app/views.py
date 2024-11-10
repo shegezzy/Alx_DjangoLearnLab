@@ -5,7 +5,8 @@ from .forms import BookForm
 from .models import Library, UserProfile
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import permission_required
 
 def is_admin(user):
     return user.profile.role == 'Admin'
