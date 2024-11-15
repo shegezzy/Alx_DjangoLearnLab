@@ -13,7 +13,7 @@ class BookAdmin(admin.ModelAdmin):
     # Enable search functionality
     search_fields = ('title', 'author')
 
-class CustomModelAdmin(UserAdmin):
+class CustomUserAdmin(UserAdmin):
     model = CustomUser
     list_display = ('username', 'email', 'date_of_birth', 'profile_photo', 'is_staff', 'is_active')
     list_filter = ('is_staff', 'is_active')
@@ -33,4 +33,4 @@ class CustomModelAdmin(UserAdmin):
     ordering = ('username',)
 # Register your models here.
 admin.site.register(Book, BookAdmin)
-admin.site.register(CustomUser, CustomModelAdmin)
+admin.site.register(CustomUser, CustomUserAdmin)
