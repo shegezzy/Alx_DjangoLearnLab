@@ -4,4 +4,10 @@
     <head>
         <meta charset="UTF-8">
     </head>
+<ul>
+    {% for book in books %}
+        <li>{{ book.title }}</li>
+    {% endfor %}
+</ul>
+
 </html>
