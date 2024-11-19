@@ -9,7 +9,7 @@ class BookList(generics.ListAPIView):
     def get_queryset(self):
         return Book.objects.all()
     
-class BookViewSet(viewsets.BookViewSet): 
+class BookViewSet(viewsets.ModelViewSet): 
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
