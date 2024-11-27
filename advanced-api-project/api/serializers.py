@@ -11,7 +11,7 @@ class BookSerializer(serializers.ModelSerializer):
            raise serializers.ValidationError("The publication year cannot be greater than the current year")
         return publication_year
 class AuthorSerializer(serializers.ModelSerializer):
-    books = BookSerializer(many=True, read_on=True)
+    books = BookSerializer(many=True, read_only=True)
     class Meta:
         model = Author
         fields = ['name']
