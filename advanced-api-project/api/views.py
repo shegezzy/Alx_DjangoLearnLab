@@ -23,12 +23,12 @@ class CustomBookDetailView(generics.RetrieveAPIView):
 
 class CustomBookUpdateView(generics.UpdateAPIView):
     queryset = Book.objects.all()
-    serializer_class = Book.objects.all()
+    serializer_class = BookSerializer
     permission_classes = [IsAuthenticated]
 
 class CustomBookDeleteView(generics.DestroyAPIView):
     queryset = Book.objects.all()
-    serializer_class = Book.objects.all()
+    serializer_class = BookSerializer
     permission_classes = [IsAuthenticated]
 
 # only authenticated users can update, delete and add books in this application.

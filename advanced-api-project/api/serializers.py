@@ -6,10 +6,12 @@ class BookSerializer(serializers.ModelSerializer):
         model = Book
         fields = '__all__'
 
-    def validate(self, publication_year):
-        if publication_year > (publication_year + 1):
+    def validate_publication(self, value):
+        if value > 2024:
            raise serializers.ValidationError("The publication year cannot be greater than the current year")
-        return publication_year
+        return value
+    
+
 class AuthorSerializer(serializers.ModelSerializer):
     books = BookSerializer(many=True, read_only=True)
     class Meta:
@@ -17,3 +19,4 @@ class AuthorSerializer(serializers.ModelSerializer):
         fields = ['name']
 
 # The book and author models establish a one-to-many relationship.
+# The validation function checks if the publication year is not in the future.
