@@ -16,7 +16,7 @@ class CustomBookListView(generics.ListAPIView):
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-class CustomBookDetailView(generics.DetailAPIView):
+class CustomBookDetailView(generics.RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -26,7 +26,7 @@ class CustomBookUpdateView(generics.UpdateAPIView):
     serializer_class = Book.objects.all()
     permission_classes = [IsAuthenticated]
 
-class CustomBookDeleteView(generics.DeleteAPIView):
+class CustomBookDeleteView(generics.DestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = Book.objects.all()
     permission_classes = [IsAuthenticated]
