@@ -1,11 +1,19 @@
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
-from rest_framework import generics
+from rest_framework import generics, filters
 from .serializers import BookSerializer
 from .models import Book, Author
-from django_filters import rest_framework
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
+import django_filters
 
+class BookFilter(django_filters.FilterSet):
+    title = django_filters.CharFilter(lookup_expr='icontains')
+    author = django_filters.CharFilter(lookup_expr='icontains')
+    publication_year = django_filters.NumberFilter(field_name='publication_year')
+    
+    class Meta:
+        model = Book
+        fields = ['title', 'author', 'publication_year']
 
 class BookCreateView(generics.CreateAPIView):
     queryset = Book.objects.all()
@@ -22,7 +30,7 @@ class BookListView(generics.ListAPIView):
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-    filterset_fields = ['title', 'author__name', 'publication_year']
+    filterset_class = BookFilter
     ordering_fields = ['title', 'publication_year']
     search_fields = ['title', 'author__name']
     ordering = ['title']
