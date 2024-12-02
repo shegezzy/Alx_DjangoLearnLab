@@ -10,4 +10,9 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(template_name='blog/logout.html'), name='logout'),
     path('register/', views.register, name='register'),
     path('profile/', views.profile, name='profile'),
+    path('', views.PostListView.as_view(template_name='blog/post_list.html'), name='post-list'),
+    path('posts/<int:pk>/', views.PostDetailView.as_view(template_name='blog/post_detail.html'), name='post-detail'),
+    path('posts/new/', views.PostCreateView.as_view(), name='post-create'),
+    path('posts/<int:pk>/edit/', views.PostUpdateView.as_view(), name='post-update'),
+    path('posts/<int:pk>/delete/', views.PostDeleteView.as_view(template_name='blog/post_confirm_delete.html'), name='post-delete'),
 ]
