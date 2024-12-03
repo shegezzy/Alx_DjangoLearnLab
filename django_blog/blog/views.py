@@ -9,6 +9,7 @@ from .models import Post, Comment
 from .forms import PostForm, CommentForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
+from taggit.models import Tag
 
 # Registration view
 def register(request):
@@ -152,4 +153,13 @@ def post_search(request):
         ).distinct()
 
     return render(request, 'blog/post_search.html', {'posts': posts, 'query': query})
+
+def posts_by_tag(request, tag_name):
+    try:
+        tag = Tag.objects.get(name=tag_name)
+    except Tag.DoesNotExist:
+        raise Http404("Tag not found")
+
+    posts = Post.objects.filter(tags__name=tag_name)
+    return render(request, 'blog/post_list.html', {'posts': posts, 'tag': tag})
 # Create your views here.
