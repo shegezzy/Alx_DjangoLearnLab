@@ -1,12 +1,12 @@
-# views.py
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import CustomUserCreationForm, UserProfileForm
+from django.http import Http404
+from .forms import CustomUserCreationForm, UserChangeForm, PostForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Post
-from .forms import PostForm
+from .models import Post, Comment
+from .forms import PostForm, CommentForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 # Registration view
@@ -24,13 +24,13 @@ def register(request):
 @login_required
 def profile(request):
     if request.method == 'POST':
-        form = UserProfileForm(request.POST, instance=request.user)
+        form = UserChangeForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
             return redirect('profile')
     else:
-        form = UserProfileForm(instance=request.user)
-    return render(request, 'registration/profile.html', {'form': form})
+        form = UserChangeForm(instance=request.user)
+    return render(request, 'blog/profile.html', {'form': form})
 
 # List View: Display all blog posts
 class PostListView(ListView):
@@ -43,6 +43,11 @@ class PostDetailView(DetailView):
     model = Post
     template_name = 'blog/post_detail.html'
     context_object_name = 'post'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comments'] = self.object.comments.all()  # Retrieve related comments
+        return context
 
 # Create View: Allow authenticated users to create a new post
 class PostCreateView(LoginRequiredMixin, CreateView):
@@ -78,4 +83,60 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         post = self.get_object()
         return post.author == self.request.user
+    
+# View to display a post along with its comments
+def post_detail(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    comments = post.comments.all()
+    comment_form = CommentForm()
+
+    return render(request, 'blog/post_detail.html', {
+        'post': post,
+        'comments': comments,
+        'comment_form': comment_form,
+    })
+
+# View that allows users to create comments
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'blog/comment_form.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user  # Set the logged-in user as the author
+        form.instance.post = Post.objects.get(pk=self.kwargs['post_id'])  # Set the associated post
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('post_detail', kwargs={'pk': self.kwargs['post_id']})
+
+# View that allows users to edit comments
+class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'blog/comment_form.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def test_func(self):
+        comment = self.get_object()
+        return self.request.user == comment.author
+
+    def get_success_url(self):
+        return reverse_lazy('post_detail', kwargs={'pk': self.kwargs['post_id']})
+
+# View allows users to delete a comment
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Comment
+    template_name = 'blog/comment_confirm_delete.html'
+
+    def test_func(self):
+        comment = self.get_object()
+        return self.request.user == comment.author
+
+    def get_success_url(self):
+        return reverse_lazy('post_detail', kwargs={'pk': self.kwargs['post_id']})
+
 # Create your views here.
