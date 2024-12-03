@@ -32,3 +32,9 @@
   {% endif %}
   <a href="{% url 'post-list' %}">Back to List</a>
 {% endblock %}
+
+ <p>Tags:
+    {% for tag in post.tags.all %}
+      <a href="{% url 'tag-detail' tag.name %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+  </p>

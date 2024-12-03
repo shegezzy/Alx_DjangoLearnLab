@@ -1,13 +1,14 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
-from .forms import CustomUserCreationForm, UserChangeForm, PostForm
+from .forms import CustomUserCreationForm, UserProfileForm, PostForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post, Comment
 from .forms import PostForm, CommentForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db.models import Q
 
 # Registration view
 def register(request):
@@ -24,12 +25,12 @@ def register(request):
 @login_required
 def profile(request):
     if request.method == 'POST':
-        form = UserChangeForm(request.POST, instance=request.user)
+        form = UserProfileForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
             return redirect('profile')
     else:
-        form = UserChangeForm(instance=request.user)
+        form = UserProfileForm(instance=request.user)
     return render(request, 'blog/profile.html', {'form': form})
 
 # List View: Display all blog posts
@@ -139,4 +140,16 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def get_success_url(self):
         return reverse_lazy('post_detail', kwargs={'pk': self.kwargs['post_id']})
 
+def post_search(request):
+    query = request.GET.get('q', '')
+    posts = Post.objects.all()
+
+    if query:
+        posts = posts.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(tags__name__icontains=query)
+        ).distinct()
+
+    return render(request, 'blog/post_search.html', {'posts': posts, 'query': query})
 # Create your views here.

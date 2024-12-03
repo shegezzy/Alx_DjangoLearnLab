@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
+from .views import post_search
 
 urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='blog/login.html'), name='login'),
@@ -14,4 +15,6 @@ urlpatterns = [
     path('post/new/', views.PostCreateView.as_view(), name='post-create'),
     path('post/<int:pk>/update/', views.PostUpdateView.as_view(), name='post-update'),
     path('post/<int:pk>/delete/', views.PostDeleteView.as_view(template_name='blog/post_confirm_delete.html'), name='post-delete'),
+    path('search/', post_search, name='post-search'),
+     path('tags/<str:tag_name>/', post_search, name='tag-detail'),
 ]
