@@ -20,4 +20,5 @@ urlpatterns = [
     path('post/<int:pk>/delete/', views.PostDeleteView.as_view(template_name='blog/post_confirm_delete.html'), name='post-delete'),
     path('search/', post_search, name='post-search'),
     path('tags/<str:tag_name>/', post_search, name='tag-detail'),
+    path('tags/<slug:tag_slug>/', views.PostByTagListView.as_view(), name='posts_by_tag'),
 ]
