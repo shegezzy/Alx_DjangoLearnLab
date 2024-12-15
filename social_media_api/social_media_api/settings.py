@@ -86,11 +86,12 @@ WSGI_APPLICATION = 'social_media_api.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-        'OPTIONS':{
-         'init_command': 'PRAGMA journal_mode=WAL; PRAGMA synchronous=1; PRAGMA mmap_size=134217728; PRAGMA journal_size_limit=67108864; PRAGMA cache_size=2000;'
-        },
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'social_media', #newly created db for social_media
+#         'USER': 'root',
+#         'PASSWORD': 'MyAlx0912',
+#         'HOST': '127.0.0.1',
+#         'PORT': '3306',
     }
 }
 
