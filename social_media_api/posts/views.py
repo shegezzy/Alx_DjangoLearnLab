@@ -227,10 +227,10 @@ class UnlikePostView(generics.DestroyAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-# def post(self, request):
-    #     pk = self.kwargs['pk']
-    #     # post = get_object_or_404(Post, pk=pk)
-    #     post = generics.get_object_or_404(Post, pk=post_id)
-    #     Like.objects.get_or_create(user=request.user, post=post)
-    #     return Response(status=status.HTTP_201_CREATED)
+def post(self, request):
+    pk = self.kwargs['pk']
+    post = generics.get_object_or_404(Post, pk=pk)
+    post = generics.get_object_or_404(Post, pk=post_id)
+    Like.objects.get_or_create(user=request.user, post=post)
+    return Response(status=status.HTTP_201_CREATED)
 # Create your views here.
