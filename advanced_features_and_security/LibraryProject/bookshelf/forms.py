@@ -6,3 +6,4 @@ class ExampleForm(forms.ModelForm):
     publication_year = forms.IntegerField(default=2020)
     ...
     # Add other fields as required
+
