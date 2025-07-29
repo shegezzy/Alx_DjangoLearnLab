@@ -20,4 +20,3 @@ class BookViewSet(viewsets.ModelViewSet):
         return Book.objects.all()
     
 
-# Create your views here.
